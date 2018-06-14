@@ -409,7 +409,7 @@ def handle_basic(req, user, password):
 
 def cache_key(req):
      # Using the connection ID doesn't seem to work on Apache 2.4, so switch to the remote address tuple of IP and port.
-     return "%s:%s" % (req.connection.remote_addr)
+     return "%s:%s" % (("%s:%s" % (req.connection.remote_addr)), req.unparsed_uri)
     
 def authenhandler(req):
     '''The request handler called by mod_python in the authentication phase.'''
@@ -433,13 +433,14 @@ def authenhandler(req):
         # NTLM_AUTHORIZED key from connection.notes), but we still let a new
         # challenge-response exchange take place.
         # For other methods, it is acceptable to return OK immediately.
-        if  auth_headers:
-            req.log_error('PYTNLM: Spurious authentication request on connection %s. Method = %s. Content-Length = %d. Headers = %s' % (
-            cache_key(req), req.method, req.clength, auth_headers), apache.APLOG_INFO)
-            if req.method!='POST' or req.clength>0:
-                return apache.OK
-        else:
-            return apache.OK
+    #force reauthorization
+	#    if  auth_headers:
+    #        req.log_error('PYTNLM: Spurious authentication request on connection %s. Method = %s. Content-Length = %d. Headers = %s' % (
+    #        cache_key(req), req.method, req.clength, auth_headers), apache.APLOG_INFO)
+    #        if req.method!='POST' or req.clength>0:
+    #            return apache.OK
+    #    else:
+    #        return apache.OK
     
     # If there is no Authorization header it means it is the first request.
     # We reject it with a 401, indicating which authentication protocol we understand.

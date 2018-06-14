@@ -106,6 +106,7 @@ Usage is best shown by an example of Apache configuration: ::
 
  <Directory /var/lib/some_directory>
 
+    Require valid-user
     AuthType NTLM
     AuthName WDOMAIN
     PythonOption Require valid-user
@@ -333,6 +334,14 @@ Check list:
   is found to be member of.
 
 .. _`[3]`: http://roadzy.blogspot.com/2011/02/finding-your-base-dn-in-active.html
+
+* If you are using linux and selinux is enabled and you are getting the following error: ::
+
+   PYNTLM: Error when retrieving Type 2 message from server(192.168.64.1) = [Errno 13] Permission denied
+
+  Then you may need to run the following command as root
+   
+   setsebool httpd_can_network_connect=1
 
 Thanks
 ======
