@@ -141,7 +141,6 @@ The following options exist:
 Apache option                                 Description
 ============================================  ======
 AuthType NTLM                                 Always specify it like this.
-Require valid-user                            Always specify it like this.
 PythonOption Require valid-user               Always specify it like this.
 PythonOption Require XYZ,WTY                  Grants access only to users named XYZ or WTY. (case insensitive)
                                               Multiple "Require user" option lines can be specified.
