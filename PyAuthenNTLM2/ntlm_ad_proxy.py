@@ -268,7 +268,7 @@ class NTLM_AD_Proxy(NTLM_Proxy):
             sAMAccountName = result.values()[0]['sAMAccountName']
             self.log('    '*tabs + "Found entry sAMAccountName:", sAMAccountName)
             for g in groups:
-                if g in sAMAccountName:
+                if g.strip().lower() in map(str.lower, sAMAccountName):
                     return True
             # Cycle through all the DNs of the groups this user/group belongs to
             topgroups = result.values()[0].get('memberOf', {})

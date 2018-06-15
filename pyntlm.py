@@ -205,8 +205,9 @@ def handle_unauthorized(req):
     @return     The Apache return code for 401 response.
     '''
     proxy_mode = req.get_options().get('WebProxyMode','off').lower() == 'on';
+    offer_basic_auth = req.get_options().get('OfferBasicAuth','off').lower() == 'on';
     req.err_headers_out.add('Proxy-Authenticate' if proxy_mode else 'WWW-Authenticate', 'NTLM')
-    if use_basic_auth:        
+    if use_basic_auth and offer_basic_auth:
         req.err_headers_out.add('WWW-Authenticate', 'Basic realm="%s"' % req.auth_name())
     req.err_headers_out.add('Connection', 'close')
     return apache.HTTP_PROXY_AUTHENTICATION_REQUIRED if proxy_mode else apache.HTTP_UNAUTHORIZED
@@ -310,14 +311,14 @@ def check_authorization(req, username, proxy):
     
     groups = []
     if rules:
-        users = [ u.strip() for u in rules.split(",")]
-        if username in users:
+        users = [ u.strip().lower() for u in rules.split(",")]
+        if username.lower() in users:
            req.log_error('PYNTLM: Authorization succeeded for user %s and URI %s.' %
               (username,req.unparsed_uri), apache.APLOG_INFO)
            return True
 
     if groupRules:
-        groups += [ g.strip() for g in groupRules.split(",")]
+        groups += [ g.strip().lower() for g in groupRules.split(",")]
 
     if groups:
         try:
