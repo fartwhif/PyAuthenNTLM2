@@ -137,30 +137,33 @@ with any request for authentication.
 
 The following options exist:
 
-=====================================  ======
-Apache option                          Description
-=====================================  ======
-AuthType NTLM                          Always specify it like this.  
-PythonOption Require valid-user                     Always specify it like this.
-PythonOption Require XYZ,WTY                   | Grants access only to users named XYZ or WTY.
-                                       | Multiple "Require user" option lines can be specified.
-AuthName *domain*                      Replace *domain* with the domain name to present to
-                                       users in the pop-up dialog.
-PythonAuthenHandler *pyntlm|path*      Use simply *pyntlm*, unless the actual `pyntlm.py` script
-                                       is not in the search path for python for the mod-python
-                                       interpreter. In that case, specify the complete file
-                                       name (with absolute path) to the script.
-PythonOption Domain *domain*           Replace *domain* with the Windows domain name (uppercase).
-PythonOption PDC *pdc*                 Replace *pdc* with the address of the Primary
-                                       Domain Controller (either IP or DNS name).
-PythonOption BDC *bdc*                 Replace *bdc* with the address of the Backup
-                                       Domain Controller (either IP or DNS name).
-                                       This entry is optional.
-PythonOption NameFmt SAM|LogOn         Set REMOTE_USER to the user name only (SAM) or to the
-                                       legacy Logon format (domain\username).
-                                       This entry is optional. SAM is the default.
-PythonOption WebProxyMode ON	       Work in the context of mod_proxy requests (default is OFF)
-=====================================  ======
+============================================  ======
+Apache option                                 Description
+============================================  ======
+AuthType NTLM                                 Always specify it like this.  
+PythonOption Require valid-user               Always specify it like this.
+PythonOption Require XYZ,WTY                  Grants access only to users named XYZ or WTY. (case insensitive)
+                                              Multiple "Require user" option lines can be specified.
+PythonOption RequireGroup topsec,abc          Grants access only to users in groups topsec or abc. (case insensitive, AD only)
+                                              Multiple "Require group" option lines can be specified.
+AuthName *domain*                             Replace *domain* with the domain name to present to
+                                              users in the pop-up dialog.
+PythonAuthenHandler *pyntlm|path*             Use simply *pyntlm*, unless the actual `pyntlm.py` script
+                                              is not in the search path for python for the mod-python
+                                              interpreter. In that case, specify the complete file
+                                              name (with absolute path) to the script.
+PythonOption Domain *domain*                  Replace *domain* with the Windows domain name (uppercase).
+PythonOption PDC *pdc*                        Replace *pdc* with the address of the Primary
+                                              Domain Controller (either IP or DNS name).
+PythonOption BDC *bdc*                        Replace *bdc* with the address of the Backup
+                                              Domain Controller (either IP or DNS name).
+                                              This entry is optional.
+PythonOption NameFmt SAM|LogOn                Set REMOTE_USER to the user name only (SAM) or to the
+                                              legacy Logon format (domain\username).
+                                              This entry is optional. SAM is the default.
+PythonOption WebProxyMode ON	              Work in the context of mod_proxy requests (default is OFF)
+PythonOption OfferBasicAuth ON	              Set basic authentication header if PyCrypto 2.x is installed (default is OFF)
+============================================  ======
 
 Apache needs to be configured to send keep alives (directive ``KeepAlive On``).
 
